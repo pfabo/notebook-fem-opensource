@@ -1,0 +1,7 @@
+! ----- names for bodies -----
+$ Olej = 1
+$ Vzduch = 2
+! ----- names for boundaries -----
+$ Lava elektroda = 3
+$ Prava elektroda = 4
+$ Okraj = 5

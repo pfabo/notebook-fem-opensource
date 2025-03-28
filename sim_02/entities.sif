@@ -1,0 +1,22 @@
+!------ Skeleton for body section -----
+Body 1
+  Name = Olej
+End
+
+Body 2
+  Name = Vzduch
+End
+
+!------ Skeleton for boundary section -----
+Boundary Condition 1
+  Name = Lava elektroda
+End
+
+Boundary Condition 2
+  Name = Prava elektroda
+End
+
+Boundary Condition 3
+  Name = Okraj
+End
+
