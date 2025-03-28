@@ -1,0 +1,173 @@
+#=======================================================================
+# Kniznica yymmdd-time-diagram.ckt
+#=======================================================================
+# Kreslenie casovych diagramov
+# 
+#
+# Obmedzenia a chyby
+# ----------------------------------------------------------------------
+# - nesmu sa použivat nazvy makier v textoch pre LaTex (napr. switch),
+#   v pripade konfliktu mien treba použit \\ v texte (sw\\itch)
+#
+# - podtrzitko v obycajnom (nie math) texte je treba pisat ako \_
+#
+# - makro setrgb pouziva premenne r_  g_  b_
+#   po jeho pouziti v skripte sa tieto inicializuju,
+#   pri pouziti vyrazu napr.  r_{ab} je tento treba pisat ako r _{ab}
+#
+# - resetrgb() nefunguje ...
+#
+#-----------------------------------------------------------------------
+# Historia / verzia
+#
+# 210717 - vytvorenie kniznice odclennenim z user.ckt
+#
+#                        
+#=======================================================================
+# Definicia konstant
+#-----------------------------------------------------------------------
+
+pulse_edge = .05
+pulse_level = 0.7
+
+#-----------------------------------------------------------------------
+# data(d, text, L|R|X)
+#-----------------------------------------------------------------------
+
+define(`data',`[
+    dx = pulse_edge;
+    dy = pulse_level;
+    B: box ht dy wid $1 invis;            # neviditelny  box
+
+    ifinstr($3, L,
+    {  
+       line from (B.w.x , B.n.y)to (B.e.x-dx, B.n.y) to (B.e);
+       line from (B.w.x , B.s.y)to (B.e.x-dx, B.s.y) to (B.e);
+    },
+    { 
+       ifinstr($3, R,
+       {
+            line from B.w to (B.w.x + dx, B.n.y)to (B.e.x, B.n.y);
+            line from B.w to (B.w.x + dx, B.s.y)to (B.e.x, B.s.y);
+       },
+       {
+           ifinstr($3, X,
+           {
+                line from B.w to (B.w.x + dx, B.n.y) to (B.w.x + dx + dx, B.n.y);  
+                line from (B.w.x + dx, B.n.y) to  (B.e.x - dx, B.n.y) dashed dx /2;
+                line from  (B.e.x - dx- dx, B.n.y) to  (B.e.x - dx, B.n.y) to (B.e);
+
+                line from B.w to (B.w.x + dx, B.s.y) to (B.w.x + dx + dx, B.s.y);
+                line from (B.w.x + dx, B.s.y) to (B.e.x - dx, B.s.y) dashed dx /2;
+                line from  (B.e.x - dx - dx, B.s.y) to  (B.e.x - dx, B.s.y) to (B.e);
+           },
+            
+           {   
+                line from B.w to (B.w.x + dx, B.n.y)to (B.e.x-dx, B.n.y) to (B.e);
+                line from B.w to (B.w.x + dx, B.s.y)to (B.e.x-dx, B.s.y) to (B.e);
+            })
+       })
+    })
+
+    ifinstr($2,-,
+        {},
+        { "\textit{$2}" at B.c ;}
+     )
+]')
+
+#-----------------------------------------------------------------------
+# clock(d, HL|LH)  
+# clock pulse 1:1
+#-----------------------------------------------------------------------
+
+define(`clock',`[
+    dx = pulse_edge;
+    dy = pulse_level;
+    B: box ht dy wid $1 invis;            # neviditelny  box
+    ifinstr($2, LH,
+    {
+        line from B.sw to B.s to B.n to B.ne to B.se;
+    }, 
+    {
+        line from B.sw to B.nw to B.n to B.s to B.se;
+    })
+]')
+
+#-----------------------------------------------------------------------
+# pulse(d, delay, HL|LH)  
+# switch-time - 0..1 * d
+#-----------------------------------------------------------------------
+define(`pulse',`[
+    dy = pulse_level;
+    dt = $1 * $2
+    B: box ht dy wid $1 invis;            # neviditelny  box
+    ifinstr($3, LH,
+    {  
+       line from (B.w.x, B.s.y) to  (B.w.x + dt, B.s.y) to (B.w.x + dt, B.n.y) to (B.e.x, B.n.y)
+    },
+    {
+        ifinstr($3, HL,
+        {
+        line from (B.w.x, B.n.y) to  (B.w.x + dt, B.n.y) to (B.w.x + dt, B.s.y) to (B.e.x, B.s.y)
+    },
+    {
+    });
+    });
+]')
+
+
+#-----------------------------------------------------------------------
+# level(d, H|L|X, D)  
+# H|L|X - logicke urovne, treti stav
+# D     - delay, ciarkovana
+#-----------------------------------------------------------------------
+
+define(`level',`[
+    dx = pulse_edge;
+    dy = pulse_level;
+
+    B: box ht dy wid $1 invis;            # neviditelny  box
+
+    value = 10;                           # finta - dlzka ciarky pri dashed
+    ifinstr($3, D, value = 0.1, )
+
+    ifinstr($2, H, 
+        {
+            ifinstr($3, X,
+                {line from B.nw to (B.ne.x -dx, B.ne.y) to B.e},
+                {line from B.nw to B.ne dashed value; }
+            )
+        
+        }, 
+    )
+
+    ifinstr($2, L, 
+        {
+            ifinstr($3, X,
+                {line from B.sw to (B.se.x-dx, B.se.y) to B.e},
+                {line from B.sw to B.se dashed value;}
+                ) 
+        
+        
+        }, 
+    )
+    
+    ifinstr($2, X, {
+         
+        ifinstr($3, L, {line from B.w  to (B.w.x + dx, B.se.y) to B.se;  }, 
+        
+            {ifinstr($3, H, {line from B.w to (B.w.x + dx, B.ne.y) to B.ne;  }, 
+                      {line from B.w to B.e dashed value; }
+        )
+        })
+        
+        
+    })
+    
+
+]')
+
+#=======================================================================
+# Koniec dokumentu
+#=======================================================================
+

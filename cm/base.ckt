@@ -1,0 +1,608 @@
+#=======================================================================
+# Kniznica yymmdd-base.ckt
+#=======================================================================
+# Uzivatelsky definovane komponenty
+# - pomenovane farby
+# - doplnkove komponenty podla STN
+# - cislovany grid
+#
+# Obmedzenia a chyby
+# ----------------------------------------------------------------------
+# - nesmu sa použivat nazvy makier v textoch pre LaTex (napr. switch),
+#   v pripade konfliktu mien treba použit \\ v texte (sw\\itch)
+#
+# - podtrzitko v obycajnom (nie math) texte je treba pisat ako \_
+#
+# - makro setrgb pouziva premenne r_  g_  b_
+#   po jeho pouziti v skripte sa tieto inicializuju,
+#   pri pouziti vyrazu napr.  r_{ab} je tento treba pisat ako r _{ab}
+#
+# - resetrgb() nefunguje ...
+#
+#-----------------------------------------------------------------------
+# Historia / verzia
+#
+# 210223
+# 220102 - doplnene casove diagramy
+# 220423 - doplnena kontrola existencie parametrov (gpio_port)
+# 220520 - doplneny kombinovany single_switch(d, ON|OFF, H|V, L|R)
+# 220526 - doplneny AC source - chyba v standarnej kniznici
+# 220623 - doplnene dual_switch
+#                   dual_switch_wide
+#                   reg32_h
+#                   reg32_v
+#                   buffer_h
+# 220717 - rozdelenie kniznice user na samostatne kniznice
+# 221016 - doplneny dc_source
+# 240628 - doplnene farby pre fill
+#=======================================================================
+# Definicia konstant
+#-----------------------------------------------------------------------
+
+pi=3.14159265359
+                        
+#=======================================================================
+# Definicia makier
+#-----------------------------------------------------------------------
+# named colors
+#-----------------------------------------------------------------------
+define(`color_reset',              `[ resetrgb;                          ]')
+
+# base colors
+define(`color_black',              `[ setrgb(       0,       0,       0); ]')
+define(`color_white',              `[ setrgb(       1,       1,       1); ]')
+define(`color_grey',               `[ setrgb( 192/255, 192/255, 192/255); ]')
+define(`color_blue',               `[ setrgb(       0,       0,       1); ]')
+define(`color_green',              `[ setrgb(       0,       1,       0); ]')
+define(`color_red',                `[ setrgb(       1,       0,       0); ]')
+define(`color_yellow',             `[ setrgb(       1,       1,       0); ]')
+define(`color_cyan',               `[ setrgb(       0,       1,       1); ]')
+define(`color_brown',              `[ setrgb( 165/255,  42/255,  42/255); ]')
+define(`color_orange',             `[ setrgb( 255/255, 165/255,       0); ]')
+define(`color_violet',             `[ setrgb( 238/255, 130/255, 238/255); ]')
+
+# light base colors
+define(`color_light_grey',         `[ setrgb( 211/255, 211/255, 211/255); ]')
+define(`color_light_yellow',       `[ setrgb( 255/255, 255/255, 224/255); ]')
+define(`color_light_blue',         `[ setrgb( 173/255, 216/255, 230/255); ]')
+
+# dark base colors
+define(`color_dark_grey',          `[ setrgb( 169/255, 169/255, 169/255); ]')
+define(`color_dark_cyan',          `[ setrgb(       0, 139/255, 139/255); ]')
+define(`color_dark_green',         `[ setrgb(  47/255,  79/255,  47/255); ]')
+define(`color_dark_orange',        `[ setrgb( 255/255, 140/255,       0); ]')
+define(`color_dark_red',           `[ setrgb( 139/255,       0,       0); ]')
+define(`color_dark_violet',        `[ setrgb( 148/255,       0, 211/255); ]')
+
+# grey colors
+define(`color_silver'              `[ setrgb( 192/255, 192/255, 192/255); ]')
+
+
+# named colors
+define(`color_aquamarine',         `[ setrgb( 127/255, 255/255, 212/255); ]')
+define(`color_cadetblue',          `[ setrgb(  95/255, 158/255, 160/255); ]')
+define(`color_coral',              `[ setrgb( 255/255, 127/255,       0); ]')
+define(`color_gold',               `[ setrgb( 204/255, 127/255,  50/255); ]')
+define(`color_mediumForestGreen',  `[ setrgb( 107/255, 142/255,  35/255); ]')
+define(`color_slategrey',          `[ setrgb( 112/255, 128/255, 144/255); ]')
+define(`color_firebrick',          `[ setrgb( 178/255,  34/255,  34/255); ]')
+define(`color_olive',              `[ setrgb( 128/255, 128/255,       0); ]')
+define(`color_khaki',              `[ setrgb( 240/255, 230/255, 140/255); ]')
+define(`color_dark_khaki',         `[ setrgb( 189/255, 183/255, 107/255); ]')
+define(`color_lemonchiffon',       `[ setrgb( 255/255, 250/255, 205/255); ]')
+define(`color_steelblue',          `[ setrgb(  70/255, 130/255, 180/255); ]')
+
+# light named colors
+define(`color_snow',               `[ setrgb( 255/255, 250/255, 250/255); ]')
+define(`color_honeydew',           `[ setrgb( 240/255, 255/255, 240/255); ]')
+define(`color_mintcream',          `[ setrgb( 245/255, 255/255, 250/255); ]')
+define(`color_azure',              `[ setrgb( 240/255, 255/255, 255/255); ]')
+define(`color_aliceblue',          `[ setrgb( 240/255, 248/255, 255/255); ]')
+define(`color_ghostwhite',         `[ setrgb( 248/255, 248/255, 255/255); ]')
+define(`color_whitesmoke',         `[ setrgb( 245/255, 245/255, 245/255); ]')
+define(`color_seashell',           `[ setrgb( 255/255, 245/255, 238/255); ]')
+define(`color_beige',              `[ setrgb( 245/255, 245/255, 220/255); ]')
+define(`color_oldlace',            `[ setrgb( 253/255, 248/255, 230/255); ]')
+define(`color_floralwhite',        `[ setrgb( 255/255, 250/255, 240/255); ]')
+define(`color_ivory',              `[ setrgb( 255/255, 255/255, 240/255); ]')
+define(`color_antiquewhite',       `[ setrgb( 255/255, 235/255, 215/255); ]')
+define(`color_linien',             `[ setrgb( 250/255, 240/255, 230/255); ]')
+define(`color_lavenderblush',      `[ setrgb( 255/255, 240/255, 245/255); ]')
+define(`color_mistyrose',          `[ setrgb( 255/255, 228/255, 225/255); ]')
+
+#define(`color_'                `[ setrgb( /255, /255, /255); ]')
+
+#-----------------------------------------------------------------------
+# kody farieb pre farebnu vypln
+# rgbfill( r,g,b, {uzavreta oblast, box, circle ...})
+
+# base colors
+define(`fill_black',              `       0,       0,       0')
+define(`fill_white',              `       1,       1,       1')
+define(`fill_grey',               `192/255, 192/255, 192/255')
+define(`fill_blue',               `       0,       0,       1')
+define(`fill_green',              `       0,       1,       0')
+define(`fill_red',                `       1,       0,       0')
+define(`fill_yellow',             `       1,       1,       0')
+define(`fill_cyan',               `       0,       1,       1')
+define(`fill_brown',              ` 165/255,  42/255,  42/255')
+define(`fill_orange',             ` 255/255, 165/255,       0')
+define(`fill_violet',             ` 238/255, 130/255, 238/255')
+
+# light base colors
+define(`fill_light_grey',         ` 211/255, 211/255, 211/255')
+define(`fill_light_yellow',       ` 255/255, 255/255, 224/255')
+define(`fill_light_blue',         ` 173/255, 216/255, 230/255')
+
+# dark base colors
+define(`fill_dark_grey',          ` 169/255, 169/255, 169/255')
+define(`fill_dark_cyan',          `       0, 139/255, 139/255')
+define(`fill_dark_green',         `  47/255,  79/255,  47/255')
+define(`fill_dark_orange',        ` 255/255, 140/255,       0')
+define(`fill_dark_red',           ` 139/255,       0,       0')
+define(`fill_dark_violet',        ` 148/255,       0, 211/255')
+
+# grey colors
+define(`fill_silver'              ` 192/255, 192/255, 192/255')
+
+
+
+#=======================================================================
+# Komponenty
+#-----------------------------------------------------------------------
+# AC source
+# oprava chybneho zobrazenia v standardnej kniznici
+# ac_source(d)
+#-----------------------------------------------------------------------
+define(`ac_source',`[
+    # upravena znacka AC zdroja
+    Q: box wid 1 ht $1 invis; 
+
+    dx=.1;
+    k =12;
+
+    CX: circle diameter .7 at Q.c
+
+    for x=-pi to pi by dx do {
+        line from Q.c+(x/k, -sin(x)/k) to Q.c+((x+dx)/k, -sin(x+dx)/k );
+    }
+    line from CX.s to Q.s; 
+    line from CX.n to Q.n;
+]')
+
+#-----------------------------------------------------------------------
+# DC source
+# krajsie zobrazenie
+# dc_source(d, r, P)
+#     d - dlzka privodov
+#     r - priemer znacky
+#     P - znacky +/- 
+#-----------------------------------------------------------------------
+define(`dc_source',`[
+    # upravena znacka AC zdroja
+    Q: box wid $2 ht $1 invis; 
+
+    dx = .1;
+    k  = 12;
+    r  = $2 * 0.7;
+    C: circle diameter r at Q.c
+
+    line from Q.c+(-r/2+0.1, r/10)  to Q.c+(r/2-.1, r/10)
+    line from Q.c+(-r/2+0.1, -r/10) to Q.c+(r/2-.1, -r/10)
+    line from C.s to Q.s; 
+    line from C.n to Q.n;
+    
+    ifinstr($3,P,
+        {
+         "$+$" at C.n above ljust;
+         "$-$" at C.s below ljust;
+        },
+        { })
+        
+]')
+
+
+#-----------------------------------------------------------------------
+# register 32 bit horizontal
+#-----------------------------------------------------------------------
+define(`reg32_h',`[
+    right;
+    boxrad=0.1;
+    w=0.5
+    h=0.5
+    color_light_grey;
+    BD: box ht h wid 7*w;
+    color_black;
+    move to BD.w
+    box ht h wid w; {"31" at last box.c}
+    box ht h wid w; {"30" at last box.c}
+    box ht h wid w; {"29" at last box.c}
+    box ht h wid w invis; {"..." at last box.c} 
+    box ht h wid w; {"2" at last box.c}
+    box ht h wid w; {"1" at last box.c}
+    box ht h wid w; {"0" at last box.c}
+]')
+
+#-----------------------------------------------------------------------
+# register 32 bit vertical
+#-----------------------------------------------------------------------
+define(`reg32_v',`[
+    down;
+    boxrad=0.1;
+    w=0.5
+    h=0.5
+    color_grey;
+    BD: box ht 7*h wid w;
+    color_black;
+    move to BD.n
+    box ht h wid w; {"31" at last box.c}
+    box ht h wid w; {"30" at last box.c}
+    box ht h wid w; {"29" at last box.c}
+    box ht h wid w invis; {"..." at last box.c} 
+    box ht h wid w; {"2" at last box.c}
+    box ht h wid w; {"1" at last box.c}
+    box ht h wid w; {"0" at last box.c}
+]')
+
+
+#-----------------------------------------------------------------------
+# buffer horizontalny
+#-----------------------------------------------------------------------
+define(`buffer_h',`[
+    right;
+    boxrad=0.1;
+    w=0.35
+    h=0.8
+    color_light_grey;
+    BD: box ht h wid 7*w;
+    color_black;
+    move to BD.w
+    box ht h wid w; 
+    box ht h wid w; 
+    box ht h wid w; 
+    box ht h wid w;
+    box ht h wid w invis; {"..." at last box.c} 
+    box ht h wid w; 
+    box ht h wid w; 
+    box ht h wid w; 
+    box ht h wid w;
+]')
+
+#-----------------------------------------------------------------------
+# dual_switch(d, ON | OFF)
+# vodorovne vyvody
+#-----------------------------------------------------------------------
+define(`dual_switch',`[
+    
+    rr = 0.15;
+    p = 1.5; 
+    B: box ht 1 wid $1 invis;
+
+    C1: circle diameter rr at  B.c + (rr/2 - p/4, 0)
+    C2: circle diameter rr at  B.c + (-rr/2 + p/4, p/4) fill 0;
+    C3: circle diameter rr at  B.c + (-rr/2 + p/4, -p/4) fill 0;
+
+    line from C1.w to B.w 
+    line from C2.e to (B.e.x, C2.c.y)
+    line from C3.e to (B.e.x, C3.c.y)
+
+    ifinstr($2,OFF,
+        {
+            line from C1.c to C2.c #+ (0, p/4)
+        },
+        {
+            line from C1.c to C3.c 
+        }
+   );
+   A: (B.e.x, C2.c.y);
+   B: (B.e.x, C3.c.y);
+   C: B.w;
+]')
+
+
+#-----------------------------------------------------------------------
+# single_switch(d, ON|OFF, H|V, L|R) - spinac
+#-----------------------------------------------------------------------
+define(`single_switch',`[
+    
+    rr = 0.15;
+    p = 1.5; 
+
+    # horizontalny spinac
+    ifinstr($3,H,
+        `[
+            B: box ht 1 wid $1 invis;                           # neviditelny  box
+            
+            ifinstr($4, R,
+                {
+                    C1: circle diameter rr at  B.c + (-rr/2 + p/4, 0)
+                    C2: circle diameter rr at  B.c + ( rr/2 - p/4, 0) fill 0;
+                    line from C2.w to B.w
+                    line from C1.e to B.e
+                },
+                {
+                    C1: circle diameter rr at  B.c + (rr/2 - p/4, 0)
+                    C2: circle diameter rr at  B.c + (-rr/2 + p/4, 0) fill 0;
+                    line from C1.w to B.w
+                    line from C2.e to B.e
+                }
+            );
+
+            
+            ifinstr($2,OFF,
+                {
+                    line from C2.c to C1.c + (0, p/4)
+                },
+                {
+                    line from C2.c to C1.c 
+                }
+            );
+        ]',
+
+
+        # vertikalny spinac        
+        `[
+            B: box ht $1 wid 1 invis;                               # neviditelny  box
+
+            ifinstr($4, R,
+                {
+                    C1: circle diameter rr at  B.c + (0, rr/2 - p/4)
+                    C2: circle diameter rr at  B.c + (0, -rr/2 + p/4) fill 0;
+                    line from C2.n to B.n
+                    line from C1.s to B.s
+                },
+                {
+                    C1: circle diameter rr at  B.c + (0, -rr/2 + p/4)
+                    C2: circle diameter rr at  B.c + (0, rr/2 - p/4) fill 0;
+                    line from C1.n to B.n
+                    line from C2.s to B.s
+                } 
+            );
+
+
+
+            ifinstr($2,OFF,
+                {
+                    line from C2.c to C1.c + (p/4, 0)
+                },
+                {
+                    line from C2.c to C1.c 
+                }
+            )
+        ]' );
+]')
+
+
+#-----------------------------------------------------------------------
+# dual_switch_wide(d, ON | OFF, L | R)
+# vertikalne vyvody
+#-----------------------------------------------------------------------
+define(`dual_switch_wide',`[
+    
+    rr = 0.15;
+    p = 1.5; 
+    B: box ht 2 wid $1 invis;
+
+    ifinstr($3, R,
+        {
+            C1: circle diameter rr at  B.c + (rr/2 - p/4, 0)
+            C2: circle diameter rr at  B.c + (-rr/2 + p/4, p/4) fill 0;
+            C3: circle diameter rr at  B.c + (-rr/2 + p/4, -p/4) fill 0;
+
+            line from C1.w to B.w;
+            line from C2.n to (C2.c.x, B.n.y);
+            line from C3.s to (C3.c.x, B.s.y);
+
+            A: (C2.c.x, B.n.y);
+            B: (C3.c.x, B.s.y);
+        },
+        {
+
+            C1: circle diameter rr at  B.c - (rr/2 - p/4, 0)
+            C2: circle diameter rr at  B.c - (-rr/2 + p/4, p/4) fill 0;
+            C3: circle diameter rr at  B.c - (-rr/2 + p/4, -p/4) fill 0;
+
+            line from C1.e to B.e;
+            line from C2.c to (C2.c.x, B.s.y);
+            line from C3.c to (C3.c.x, B.n.y);
+
+            A: (C2.c.x, B.s.y);
+            B: (C3.c.x, B.n.y);
+        }
+    );
+
+
+    ifinstr($2,OFF,
+        {
+            line from C1.c to C2.c #+ (0, p/4)
+        },
+        {
+            line from C1.c to C3.c 
+        }
+   );
+   C: B.w;
+]')
+
+
+#-----------------------------------------------------------------------
+# single_switch_h(d, ON | OFF) - horizontalny spinac
+#-----------------------------------------------------------------------
+define(`single_switch_h',`[
+
+    B: box ht 1 wid $1 invis;            # neviditelny  box
+    rr = 0.15;
+    p = 1.5; 
+
+    C1: circle diameter rr at  B.c + (rr/2 - p/4, 0)
+    C2: circle diameter rr at  B.c + (-rr/2 + p/4, 0) fill 0;
+    line from C1.w to B.w
+    line from C2.e to B.e
+    ifinstr($2,OFF,
+        {
+            line from C2.c to C1.c + (0, p/4)
+        },
+        {
+            line from C2.c to C1.c 
+        }
+    );
+]')
+
+#-----------------------------------------------------------------------
+# single_switch_v(d, ON | OFF) - vertikalny spinac
+#-----------------------------------------------------------------------
+define(`single_switch_v',`[
+
+    B: box ht $1 wid 1 invis;            # neviditelny  box
+    rr = 0.15; 
+    p = 1.5;
+    
+    C1: circle diameter rr at  B.c + (0, -rr/2 + p/4)
+    C2: circle diameter rr at  B.c + (0, rr/2 - p/4) fill 0;
+    line from C1.n to B.n
+    line from C2.s to B.s
+    ifinstr($2,OFF,
+        {
+            line from C2.c to C1.c + (p/4, 0)
+        },
+        {
+            line from C2.c to C1.c 
+        }
+    )
+]')
+
+#-----------------------------------------------------------------------
+# gnd - zem
+#-----------------------------------------------------------------------
+define(`gnd',`[
+    d = 1;
+    L: line from Here to Here + (0, -d/4)
+    linethick = 2
+    line from L.end + (-d/4, 0) to L.end + (d/4, 0) 
+]')
+
+#-----------------------------------------------------------------------
+# power - napajanie
+#-----------------------------------------------------------------------
+define(`power',`[
+    d = 1;
+    up_
+    PWR: tconn(d/2, 0); "\textit{$1}" at PWR.n above; 
+]')
+
+
+
+
+#-----------------------------------------------------------------------
+# N - fet
+# fet_N(length, L|R)  - dlzka vyvodov, orientacia 
+#-----------------------------------------------------------------------
+define(`fet_N',`[
+    d=$1
+    s=1
+    Q: box ht d wid s invis
+    
+    ifinstr($2,L, 
+       { 
+         G: Q.w;  # gate
+         D: Q.n   # kolektor
+         S: Q.s   # emitor
+         L1: line from Q.w to Q.w + (s/4, 0)
+         dx=s/10
+       },
+       {
+         G: Q.e;  # gate
+         D: Q.n   # kolektor
+         S: Q.s   # emitor
+         L1: line from Q.e to Q.e - (s/4, 0);
+         dx=-s/10
+       }
+    )
+    line from L1.end + (0,-s/4) to L1.end + (0,s/4)
+    L2: line from L1.end + (dx,-s/4) to L1.end + (dx,s/4)
+   
+    line from L2.start to (Q.c, L2.start) to S
+    line from L2.end to (Q.c, L2.end) to D
+]')
+
+#-----------------------------------------------------------------------
+# P - fet
+# fet_P(length, L|R)  - dlzka vyvodov, orientacia 
+#-----------------------------------------------------------------------
+define(`fet_P',`[
+
+    d = $1;
+    s = 1
+    rr = 0.15
+    Q: box ht d wid s invis
+    
+    ifinstr($2,L, 
+       { 
+         G: Q.w;   # gate
+         D: Q.n   # kolektor
+         S: Q.s   # emitor
+         right_
+         L1: line from Q.w to Q.w + (s/4 - rr, 0)
+         C: circle diameter rr
+         Z: C.e
+         dx= s/10
+       },
+       {
+         G: Q.e;   # gate
+         D: Q.n   # kolektor
+         S: Q.s   # emitor
+         left_;
+         L1: line from Q.e to Q.e - (s/4 -rr, 0);
+         C: circle diameter rr
+         Z: C.w
+         dx=-s/10
+       }
+    )
+    line from Z + (0,-s/4) to Z + (0,s/4)
+    L2: line from Z + (dx,-s/4) to Z + (dx,s/4)
+    
+    line from L2.start to (Q.c, L2.start) to S
+    line from L2.end to (Q.c, L2.end) to D
+]')
+
+
+
+#=======================================================================
+# grid - vykreslenie mriezky
+# grid(x,y) - velkost x,y - rozmery v default jednotkach
+#-----------------------------------------------------------------------
+define(`grid',`[
+    
+    W: box ht $2+1 wid $1+1 invis
+    move to W.w + (.5,0)
+    Q: box ht $2 wid $1 invis
+
+    setrgb(0.9,0.9,0.9);
+    for i=0 to $2*2 do{
+        line from (Q.w.x, Q.s.y+i*0.5) to (Q.w.x+$1, Q.s.y+i*0.5);
+        { color_blue; sprintf("\scriptsize %g",i/2) at (Q.w.x-0.55, Q.s.y+i*0.5) ljust; setrgb(0.9,0.9,0.9); };
+    }; 
+    for i=0 to $1*2 do{
+        line from (Q.w.x + i*0.5, Q.s.y) to (Q.w.x + i*0.5, Q.s.y+$2);
+        { color_blue; sprintf("\scriptsize %g",i/2) at (Q.w.x + i*0.5, Q.s.y-0.2); setrgb(0.9,0.9,0.9); };
+    }
+    resetrgb;
+]')
+
+
+#-----------------------------------------------------------------------
+# Grid - vykreslenie mriezky a presun originu na poziciu (0,0)
+# Grid(x,y) - velkost x,y - rozmery v default jednotkach
+#-----------------------------------------------------------------------
+define(`Grid',`
+    size_x = $1
+    size_y = $2
+    move to (-0.5, size_y/2); 
+    grid(size_x, size_y); 
+    move to 0,0;
+')
+
+#=======================================================================
+# Koniec dokumentu
+#=======================================================================
+
+

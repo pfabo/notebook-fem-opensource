@@ -1,0 +1,174 @@
+#=======================================================================
+# Kniznica yymmdd-flowchart.ckt
+#=======================================================================
+# Kniznica pre kreslenie vyvojovych diagramov
+# Prepisane z dokumentu
+#     Creating Flowcharts in L A TEX
+#     Using the pic Language ∗
+#     Miguel Torres-Torriti
+#     December 21 th , 2008
+#
+# Obmedzenia a chyby
+# ----------------------------------------------------------------------
+# - nesmu sa použivat nazvy makier v textoch pre LaTex (napr. switch),
+#   v pripade konfliktu mien treba použit \\ v texte (sw\\itch)
+#
+# - podtrzitko v obycajnom (nie math) texte je treba pisat ako \_
+#
+# - pristup k prvkom diagramov - last [].c
+#
+# - pre zabranenie konfliktu mien s inymi kniznicami komponenty 
+#   diagramov zacinaju velkym pismenom
+#
+#-----------------------------------------------------------------------
+# Historia / verzia
+#
+# 220717 - vytvorenie kniznica
+#
+#=======================================================================
+# Kniznica symbolov pre flowchart diagramy
+#-----------------------------------------------------------------------
+# Proces(w,h,name)
+#-----------------------------------------------------------------------
+define Process
+{[
+    B: box ht $2 wid $1;
+   {"\textit{$3}" at B.c };
+]}
+
+#-----------------------------------------------------------------------
+# Data(w,h,name)
+#-----------------------------------------------------------------------
+define Data
+{[
+    dx=0.1;
+    B: box ht $2 wid $1 invis;
+    line from B.nw+(dx,0) to B.ne+(dx,0) to B.se+(-dx,0) to  B.sw+(-dx,0) to B.nw+(dx,0)
+    {"\textit{$3}" at B.c };
+]}
+
+#-----------------------------------------------------------------------
+# Decision(w,h,name)
+# if-else blok
+#-----------------------------------------------------------------------
+define Decision
+{[
+    B: box ht $2 wid $1 invis;
+    line from B.n to B.e to B.s to B.w to B.n;
+    #rgbfill(255/255, 222/255, 273/255, line from B.n to B.e to B.s to B.w to B.n; )
+    {"\textit{$3}" at B.c };
+]}
+
+#-----------------------------------------------------------------------
+# Preparation(w,h,name)
+#-----------------------------------------------------------------------
+define Preparation
+{[
+    dx=0.1;
+    B: box ht $2 wid $1 invis;
+    line from B.w to B.nw+(dx,0) to B.ne-(dx,0) to B.e to B.se-(dx,0) to B.sw+(dx,0) to B.w;
+    {"\textit{$3}" at B.c };
+]}
+
+
+#-----------------------------------------------------------------------
+# Terminator(w,h,name)
+#-----------------------------------------------------------------------
+define Terminator
+{[
+    dx = 0.1;
+    r  = $2/2;
+    B: box ht $2 wid $1 invis;
+    line from B.sw+(r,0) to B.se-(r,0);
+    right; arc rad r from Here to B.ne-(r,0);
+    line from Here to B.nw+(r,0);
+    left; arc rad r from Here to B.sw+(r,0);
+
+    {"\textit{$3}" at B.c };
+]}
+
+#-----------------------------------------------------------------------
+# Connector(r,name)
+#-----------------------------------------------------------------------
+define Connector
+{[
+    r=$1;
+    B: circle rad r;
+    {"\textit{$2}" at B.c };
+]}
+
+#-----------------------------------------------------------------------
+# Keying(r,name)
+#-----------------------------------------------------------------------
+define Keying
+{[
+    w=$1; 
+    h=$2;
+    dx=(h/4)/2;
+    r=dx/2+(h/2)^2/(2*dx);
+    B: box wid w ht h invis;
+
+    line from B.sw+(dx,0) to B.se-(dx,0);
+    left; arc rad r from Here to B.ne-(dx,0);
+    line from Here to B.nw+(dx,0);
+    right; arc rad r from Here to B.sw+(dx,0);
+
+    {"\textit{$3}" at B.c };
+]}
+
+#-----------------------------------------------------------------------
+# Keyboard(w,h,name)
+#-----------------------------------------------------------------------
+define Keyboard
+{[
+    w=$1; 
+    h=$2;
+    dy=(w/6)/2;
+    B: box wid w ht h invis;
+
+    line from B.nw-(0,dy) to B.sw to B.se to B.ne+(0,dy) to B.nw-(0,dy);
+    {"\textit{$3}" at B.c };
+]}
+
+
+#-----------------------------------------------------------------------
+# Document(w,h,name)
+#-----------------------------------------------------------------------
+define Document
+{[
+    w=$1; 
+    h=$2;
+    dy=(w/6)/2;
+    r=sqrt((w/2)^2+dy^2);
+    B: box wid w ht h invis;
+    line from B.se+(0,dy) to B.ne to B.nw to B.sw;
+    up; 
+    arc rad w/2 from B.sw to B.s;
+    arc cw rad r from B.s to B.se+(0,dy);
+    {"\textit{$3}" at B.c };
+]}
+
+#-----------------------------------------------------------------------
+# Display(w,h,name)
+#-----------------------------------------------------------------------
+define Display
+{[
+    w=$1;
+    h=$2;
+    dx=1.5*(h/4)/2;
+    r=dx/2+(h/2)^2/(2*dx);
+    B: box wid w ht h invis;
+
+    line from B.sw+(4*dx/1.5,0) to B.se-(dx,0);
+    left; 
+    arc rad r from Here to B.ne-(dx,0);
+    line from Here to B.nw+(4*dx/1.5,0);
+    arc rad r from Here to B.w;
+    right; 
+    arc rad r from Here to B.sw+(4*dx/1.5,0);
+    {"\textit{$3}" at B.c };
+]}
+
+#=======================================================================
+# Koniec dokumentu
+#=======================================================================

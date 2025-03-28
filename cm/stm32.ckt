@@ -1,0 +1,238 @@
+#=======================================================================
+# Kniznica yymmdd-stm32.ckt
+#=======================================================================
+# Bloky pre kreslenie strukturnych vztahov v STM32
+#
+#
+# Obmedzenia a chyby
+# ----------------------------------------------------------------------
+# - nesmu sa použivat nazvy makier v textoch pre LaTex (napr. switch),
+#   v pripade konfliktu mien treba použit \\ v texte (sw\\itch)
+#
+# - podtrzitko v obycajnom (nie math) texte je treba pisat ako \_
+#
+# - makro setrgb pouziva premenne r_  g_  b_
+#   po jeho pouziti v skripte sa tieto inicializuju,
+#   pri pouziti vyrazu napr.  r_{ab} je tento treba pisat ako r _{ab}
+#
+# - resetrgb() nefunguje ...
+#
+#-----------------------------------------------------------------------
+# Historia / verzia
+#
+# 210717 - vytvorenie kniznice odclenenim z user.ckt
+#
+#=======================================================================
+# Definicia konstant
+#-----------------------------------------------------------------------
+
+                        
+#=======================================================================
+# Definicia makier
+#-----------------------------------------------------------------------
+# vonkajsi terminal
+# gpio_port(d, L|R, B|C)
+# L|R   - orientacia
+# B|C   - farebna / ciernobiela verzia
+#-----------------------------------------------------------------------
+define(`gpio_port',`[
+    
+    ifelse(defn(`d'), $1, d=1, d=$1) 
+    
+    Q1:box ht d/2 wid d invis
+    boxrad=0.1
+    
+    #B:box ht d/3 wid d/3 at Q1.w + (d/3/2, 0)
+    
+    ifinstr($2, L,
+    { 
+        # vyber farebnej verzie
+        ifinstr($3, C, 
+                {
+                    rgbfill(255/255, 222/255, 173/255, B: box ht d/3 wid d/3 at Q1.w + (d/3/2, 0)  )
+                },
+                {
+                    B:box ht d/3 wid d/3 at Q1.w + (d/3/2, 0) 
+                } ) 
+        line from B.e to Q1.e 
+    },
+    { 
+        ifinstr($3, C,
+            {
+                rgbfill(255/255, 222/255, 273/255, B: box ht d/3 wid d/3 at Q1.e - (d/3/2, 0)  )
+            },
+            {
+                B:box ht d/3 wid d/3 at Q1.e - (d/3/2, 0)
+            }) 
+        line from B.w to Q1.w 
+    })
+    
+    line from B.nw to B.se
+    line from B.sw to B.ne
+    line from B.e to Q1.e 
+]')
+
+#-----------------------------------------------------------------------
+# vnutorny vystupny terminal
+# vstupy a vystupy z/do vnutornych blokov
+# internal_port_out(L|R)
+#-----------------------------------------------------------------------
+define(`internal_port_out',`[
+    d = 0.8;
+    Q: box ht d/2 wid d invis
+    
+    ifinstr($1, L,
+    {
+        line from Q.nw+(d/4,0) to Q.c to Q.sw+(d/4,0) to Q.se-(d/4,0) to Q.e to Q.ne-(d/4,0) to Q.nw+(d/4,0)
+        line from Q.c to Q.w
+    },
+    {
+       line from Q.ne-(d/4,0) to Q.c to Q.se-(d/4,0) to Q.sw+(d/4,0) to Q.w to Q.nw+(d/4,0) to Q.ne-(d/4,0)
+       line from Q.c to Q.e
+    
+    })
+]')
+
+
+#-----------------------------------------------------------------------
+# vnutorny vystupny terminal
+# vstupy a vystupy z/do vnutornych blokov
+# internal_port_in(L|R)
+#-----------------------------------------------------------------------
+define(`internal_port_in',`[
+    d = 0.8;
+    Q: box ht d/2 wid d invis
+    
+    ifinstr($1, L,
+    {
+        line from Q.nw to Q.n to Q.c+(d/4,0) to Q.s to Q.sw to Q.w+(d/4,0) to Q.nw
+        line from Q.c+(d/4,0) to Q.e
+    },
+    {
+       line from Q.ne to Q.n to Q.c-(d/4,0) to Q.s to Q.se to Q.e-(d/4,0) to Q.ne 
+       line from Q.c-(d/4,0) to Q.w
+    
+    })
+]')
+
+
+#-----------------------------------------------------------------------
+# register(meno)
+#-----------------------------------------------------------------------
+define(`register',`[
+    d = 0.6
+    boxrad=0.1 
+    setrgb( 0.4, 0.4, 0.4);
+    rgbfill(255/255, 255/255, 224/255, Q: box ht d wid 4*d )  
+    color_black
+    {"\textit{$1}" at Q.c };
+]')
+
+
+#-----------------------------------------------------------------------
+# register_shadow(meno)
+#-----------------------------------------------------------------------
+define(`register_shadow',`[
+    d = 0.6
+    dx = 0.06
+    E: box ht d + dx wid 4*d + dx invis
+    
+    boxrad=0.1 
+    setrgb( 0.8, 0.8, 0.8); 
+    rgbfill(0.8, 0.8, 0.8, box ht d wid 4*d at E.c + (dx/2, -dx/2) )
+    
+    setrgb( 0.4, 0.4, 0.4);
+    rgbfill(255/255, 255/255, 224/255, Q: box ht d wid 4*d at E.c + (-dx/2, dx/2) ) 
+    
+    color_black
+    {"\textit{$1}" at Q.c };
+
+]')
+
+
+#-----------------------------------------------------------------------
+# counter(meno)
+#-----------------------------------------------------------------------
+define(`counter',`[
+    d = 0.6
+    boxrad=0.1 
+    setrgb( 0.4, 0.4, 0.4);
+    rgbfill(175/255, 238/255, 238/255, Q: box ht d wid 4*d )  
+    color_black
+    {"\textit{$1}" at Q.c };
+]')
+
+
+#-----------------------------------------------------------------------
+# prescaler(hodnota)
+#-----------------------------------------------------------------------
+define(`prescaler',`[
+    d = 0.6
+    boxrad=0.1 
+    color_orange
+    rgbfill(255/255, 250/255, 205/255, Q: box ht d wid 2*d )  
+    color_black
+    {"\textit{$1}" at Q.c };
+]')
+
+
+#-----------------------------------------------------------------------
+# controller(name, h,w)
+#-----------------------------------------------------------------------
+define(`controller',`[
+    
+    ifelse(defn(`dx'), $2, dx=1.8, dx=$2);
+    
+    ifelse(defn(`dy'), $3, dy=0.8, dy=$3); 
+    
+    boxrad=0.1 
+    color_olive
+    #rgbfill(240/255, 255/255, 240/255, Q: box ht $1 wid $2 ) 
+    
+    rgbfill(240/255, 255/255, 240/255, Q: box ht dy wid dx )  
+    
+    color_black
+    {"\textit{$1}" at Q.c };
+]')
+
+#-----------------------------------------------------------------------
+# controller_big(meno1, meno2, h, w)
+# dvojriadkovy text
+#-----------------------------------------------------------------------
+define(`controller_big',`[
+    d = 0.6
+    boxrad=0.1;
+    
+    ifelse(defn(`dx'), $3, dx=2.2, dx=$3);
+
+    ifelse(defn(`dy'), $4, dy=1, dy=$4);  
+
+    color_olive  
+    rgbfill(240/255, 255/255, 240/255, Q: box ht dy wid dx )
+    color_black
+    {"\textit{$1}" at Q.c above};
+    {"\textit{$2}" at Q.c below};
+]')
+
+
+#-----------------------------------------------------------------------
+# block(meno, w, h)
+#-----------------------------------------------------------------------
+define(`block',`[
+    d = 0.6
+    boxrad=0.1 
+    
+    ifelse(defn(`dx'), $2, dx=2.2, dx=$2);
+
+    ifelse(defn(`dy'), $3, dy=1, dy=$3); 
+    
+    color_steelblue;
+    rgbfill( 245/255, 255/255, 250/255, Q: box ht dy wid dx )  
+    color_black
+    {"{\textit{$1}}" at Q.nw +(boxrad/4, boxrad/4) above ljust};
+]')
+
+#=======================================================================
+# Koniec dokumentu
+#=======================================================================
+
