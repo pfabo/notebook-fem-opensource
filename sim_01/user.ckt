@@ -1,0 +1,434 @@
+# Obmedzenia a chyby
+# ----------------------------------------------------------------------
+# - nesmu sa použivat nazvy makier v textoch pre LaTex (napr. switch)
+#
+# - makro setrgb pouziva (asi) premenne r_  g_  b_
+#   po jeho pouziti v skripte sa tieto inicializuju,
+#   pri pouziti vyrazu napr.  r_{ab} je tento treba pisat ako r _{ab}
+#   resetrgb() nefunguje ...
+#
+# verzia 210223
+#
+
+
+pi=3.14159265359
+
+                        
+#=======================================================================
+# Definicia makier
+#-----------------------------------------------------------------------
+# colors
+#-----------------------------------------------------------------------
+define(`color_reset',              `[ resetrgb;                          ]')
+
+# base colors
+define(`color_black',              `[ setrgb(       0,       0,       0); ]')
+define(`color_white',              `[ setrgb(       1,       1,       1); ]')
+define(`color_grey',               `[ setrgb( 128/255, 128/255, 128/255); ]')
+define(`color_blue',               `[ setrgb(       0,       0,       1); ]')
+define(`color_green',              `[ setrgb(       0,       1,       0); ]')
+define(`color_red',                `[ setrgb(       1,       0,       0); ]')
+define(`color_yellow',             `[ setrgb(       1,       1,       0); ]')
+define(`color_cyan',               `[ setrgb(       0,       1,       1); ]')
+define(`color_brown',              `[ setrgb( 165/255,  42/255,  42/255); ]')
+define(`color_orange',             `[ setrgb( 255/255, 165/255,       0); ]')
+define(`color_violet',             `[ setrgb( 238/255, 130/255, 238/255); ]')
+
+# light base colors
+define(`color_light_grey',         `[ setrgb( 211/255, 211/255, 211/255); ]')
+define(`color_light_yellow',       `[ setrgb( 255/255, 255/255, 224/255); ]')
+define(`color_light_blue',         `[ setrgb( 173/255, 216/255, 230/255); ]')
+
+# dark base colors
+define(`color_dark_grey',          `[ setrgb( 169/255, 169/255, 169/255); ]')
+define(`color_dark_cyan',          `[ setrgb(       0, 139/255, 139/255); ]')
+define(`color_dark_green',         `[ setrgb(  47/255,  79/255,  47/255); ]')
+define(`color_dark_orange',        `[ setrgb( 255/255, 140/255,       0); ]')
+define(`color_dark_red',           `[ setrgb( 139/255,       0,       0); ]')
+define(`color_dark_violet',        `[ setrgb( 148/255,       0, 211/255); ]')
+
+# grey colors
+define(`color_silver'              `[ setrgb( 192/255, 192/255, 192/255); ]')
+
+
+# named colors
+define(`color_aquamarine',         `[ setrgb( 127/255, 255/255, 212/255); ]')
+define(`color_cadetblue',          `[ setrgb(  95/255, 158/255, 160/255); ]')
+define(`color_coral',              `[ setrgb( 255/255, 127/255,       0); ]')
+define(`color_gold',               `[ setrgb( 204/255, 127/255,  50/255); ]')
+define(`color_mediumForestGreen',  `[ setrgb( 107/255, 142/255,  35/255); ]')
+define(`color_slategrey',          `[ setrgb( 112/255, 128/255, 144/255); ]')
+define(`color_firebrick',          `[ setrgb( 178/255,  34/255,  34/255); ]')
+define(`color_olive',              `[ setrgb( 128/255, 128/255,       0); ]')
+define(`color_khaki',              `[ setrgb( 240/255, 230/255, 140/255); ]')
+define(`color_dark_khaki',         `[ setrgb( 189/255, 183/255, 107/255); ]')
+define(`color_lemonchiffon',       `[ setrgb( 255/255, 250/255, 205/255); ]')
+define(`color_steelblue',          `[ setrgb(  70/255, 130/255, 180/255); ]')
+
+# light named colors
+define(`color_snow',               `[ setrgb( 255/255, 250/255, 250/255); ]')
+define(`color_honeydew',           `[ setrgb( 240/255, 255/255, 240/255); ]')
+define(`color_mintcream',          `[ setrgb( 245/255, 255/255, 250/255); ]')
+define(`color_azure',              `[ setrgb( 240/255, 255/255, 255/255); ]')
+define(`color_aliceblue',          `[ setrgb( 240/255, 248/255, 255/255); ]')
+define(`color_ghostwhite',         `[ setrgb( 248/255, 248/255, 255/255); ]')
+define(`color_whitesmoke',         `[ setrgb( 245/255, 245/255, 245/255); ]')
+define(`color_seashell',           `[ setrgb( 255/255, 245/255, 238/255); ]')
+define(`color_beige',              `[ setrgb( 245/255, 245/255, 220/255); ]')
+define(`color_oldlace',            `[ setrgb( 253/255, 248/255, 230/255); ]')
+define(`color_floralwhite',        `[ setrgb( 255/255, 250/255, 240/255); ]')
+define(`color_ivory',              `[ setrgb( 255/255, 255/255, 240/255); ]')
+define(`color_antiquewhite',       `[ setrgb( 255/255, 235/255, 215/255); ]')
+define(`color_linien',             `[ setrgb( 250/255, 240/255, 230/255); ]')
+define(`color_lavenderblush',      `[ setrgb( 255/255, 240/255, 245/255); ]')
+define(`color_mistyrose',          `[ setrgb( 255/255, 228/255, 225/255); ]')
+
+#define(`color_'                `[ setrgb( /255, /255, /255); ]')
+
+#-----------------------------------------------------------------------
+# single_switch_h(d, ON | OFF) - horizontalny spinac
+#-----------------------------------------------------------------------
+define(`single_switch_h',`[
+
+    B: box ht 1 wid $1 invis;            # neviditelny  box
+    rr = 0.15;
+    p = 1.5; 
+
+    C1: circle diameter rr at  B.c + (rr/2 - p/4, 0)
+    C2: circle diameter rr at  B.c + (-rr/2 + p/4, 0) fill 0;
+    line from C1.w to B.w
+    line from C2.e to B.e
+    ifinstr($2,OFF,
+        {
+            line from C2.c to C1.c + (0, p/4)
+        },
+        {
+            line from C2.c to C1.c 
+        }
+    );
+]')
+
+#-----------------------------------------------------------------------
+# single_switch_v(d, ON | OFF) - vertikalny spinac
+#-----------------------------------------------------------------------
+define(`single_switch_v',`[
+
+    B: box ht $1 wid 1 invis;            # neviditelny  box
+    rr = 0.15; 
+    p = 1.5;
+    
+    C1: circle diameter rr at  B.c + (0, -rr/2 + p/4)
+    C2: circle diameter rr at  B.c + (0, rr/2 - p/4) fill 0;
+    line from C1.n to B.n
+    line from C2.s to B.s
+    ifinstr($2,OFF,
+        {
+            line from C2.c to C1.c + (p/4, 0)
+        },
+        {
+            line from C2.c to C1.c 
+        }
+    )
+]')
+
+#-----------------------------------------------------------------------
+# gnd - zem
+#-----------------------------------------------------------------------
+define(`gnd',`[
+    d = 1;
+    L: line from Here to Here + (0, -d/4)
+    linethick = 2
+    line from L.end + (-d/4, 0) to L.end + (d/4, 0) 
+]')
+
+#-----------------------------------------------------------------------
+# power - napajanie
+#-----------------------------------------------------------------------
+define(`power',`[
+    d = 1;
+    up_
+    PWR: tconn(d/2, 0); "\textit{$1}" at PWR.n above; 
+]')
+
+
+
+
+#-----------------------------------------------------------------------
+# N - fet
+# fet_N(length, L|R)  - dlzka vyvodov, orientacia 
+#-----------------------------------------------------------------------
+define(`fet_N',`[
+    d=$1
+    s=1
+    Q: box ht d wid s invis
+    
+    ifinstr($2,L, 
+       { 
+         G: Q.w;  # gate
+         D: Q.n   # kolektor
+         S: Q.s   # emitor
+         L1: line from Q.w to Q.w + (s/4, 0)
+         dx=s/10
+       },
+       {
+         G: Q.e;  # gate
+         D: Q.n   # kolektor
+         S: Q.s   # emitor
+         L1: line from Q.e to Q.e - (s/4, 0);
+         dx=-s/10
+       }
+    )
+    line from L1.end + (0,-s/4) to L1.end + (0,s/4)
+    L2: line from L1.end + (dx,-s/4) to L1.end + (dx,s/4)
+   
+    line from L2.start to (Q.c, L2.start) to S
+    line from L2.end to (Q.c, L2.end) to D
+]')
+
+#-----------------------------------------------------------------------
+# P - fet
+# fet_P(length, L|R)  - dlzka vyvodov, orientacia 
+#-----------------------------------------------------------------------
+define(`fet_P',`[
+
+    d = $1;
+    s = 1
+    rr = 0.15
+    Q: box ht d wid s invis
+    
+    ifinstr($2,L, 
+       { 
+         G: Q.w;   # gate
+         D: Q.n   # kolektor
+         S: Q.s   # emitor
+         right_
+         L1: line from Q.w to Q.w + (s/4 - rr, 0)
+         C: circle diameter rr
+         Z: C.e
+         dx= s/10
+       },
+       {
+         G: Q.e;   # gate
+         D: Q.n   # kolektor
+         S: Q.s   # emitor
+         left_;
+         L1: line from Q.e to Q.e - (s/4 -rr, 0);
+         C: circle diameter rr
+         Z: C.w
+         dx=-s/10
+       }
+    )
+    line from Z + (0,-s/4) to Z + (0,s/4)
+    L2: line from Z + (dx,-s/4) to Z + (dx,s/4)
+    
+    line from L2.start to (Q.c, L2.start) to S
+    line from L2.end to (Q.c, L2.end) to D
+]')
+
+#-----------------------------------------------------------------------
+# grid - vykreslenie mriezky
+# grid(x,y) - velkost x,y - rozmery v default jednotkach
+#-----------------------------------------------------------------------
+define(`grid',`[
+    
+    W: box ht $2+1 wid $1+1 invis
+    move to W.w + (.5,0)
+    Q: box ht $2 wid $1 invis
+
+    setrgb(0.9,0.9,0.9);
+    for i=0 to $2*2 do{
+        line from (Q.w.x, Q.s.y+i*0.5) to (Q.w.x+$1, Q.s.y+i*0.5);
+        { color_black; sprintf("\scriptsize %g",i/2) at (Q.w.x-0.55, Q.s.y+i*0.5) ljust; setrgb(0.9,0.9,0.9); };
+    }; 
+    for i=0 to $1*2 do{
+        line from (Q.w.x + i*0.5, Q.s.y) to (Q.w.x + i*0.5, Q.s.y+$2);
+        { color_black; sprintf("\scriptsize %g",i/2) at (Q.w.x + i*0.5, Q.s.y-0.2); setrgb(0.9,0.9,0.9); };
+    }
+    resetrgb;
+]')
+
+#=======================================================================
+# STM bloky
+#-----------------------------------------------------------------------
+# vonkajsi terminal
+# gpio_port(L|R, B|C)
+# L|R   - orientacia
+# B|C   - farebna / ciernobiela verzia
+#-----------------------------------------------------------------------
+define(`gpio_port',`[
+    d = 1;
+    Q: box ht d/2 wid d invis
+    boxrad=0.1
+    ifinstr($1, L,
+    { 
+        # vyber farebnej verzie
+        ifinstr($2, C, 
+                {
+                    rgbfill(255/255, 222/255, 173/255, B: box ht d/3 wid d/3 at Q.w + (d/3/2, 0)  )
+                },
+                {
+                    B: box ht d/3 wid d/3 at Q.w + (d/3/2, 0) 
+                } )
+        #rgbfill(255/255, 222/255, 173/255, B: box ht d/3 wid d/3 at Q.w + (d/3/2, 0)  ) 
+        line from B.e to Q.e 
+    },
+    { 
+        ifinstr($2, C,
+            {
+                rgbfill(255/255, 222/255, 273/255, B: box ht d/3 wid d/3 at Q.e - (d/3/2, 0)  )
+            },
+            {
+                B: box ht d/3 wid d/3 at Q.e - (d/3/2, 0)
+            }) 
+        #rgbfill(255/255, 222/255, 273/255, B: box ht d/3 wid d/3 at Q.e - (d/3/2, 0)  )
+        line from B.w to Q.w 
+    })
+    line from B.nw to B.se
+    line from B.sw to B.ne
+    line from B.e to Q.e 
+]')
+
+#-----------------------------------------------------------------------
+# vnutorny vystupny terminal
+# vstupy a vystupy z/do vnutornych blokov
+# internal_port_out(L|R)
+#-----------------------------------------------------------------------
+define(`internal_port_out',`[
+    d = 0.8;
+    Q: box ht d/2 wid d invis
+    
+    ifinstr($1, L,
+    {
+        line from Q.nw+(d/4,0) to Q.c to Q.sw+(d/4,0) to Q.se-(d/4,0) to Q.e to Q.ne-(d/4,0) to Q.nw+(d/4,0)
+        line from Q.c to Q.w
+    },
+    {
+       line from Q.ne-(d/4,0) to Q.c to Q.se-(d/4,0) to Q.sw+(d/4,0) to Q.w to Q.nw+(d/4,0) to Q.ne-(d/4,0)
+       line from Q.c to Q.e
+    
+    })
+]')
+
+
+#-----------------------------------------------------------------------
+# vnutorny vystupny terminal
+# vstupy a vystupy z/do vnutornych blokov
+# internal_port_in(L|R)
+#-----------------------------------------------------------------------
+define(`internal_port_in',`[
+    d = 0.8;
+    Q: box ht d/2 wid d invis
+    
+    ifinstr($1, L,
+    {
+        line from Q.nw to Q.n to Q.c+(d/4,0) to Q.s to Q.sw to Q.w+(d/4,0) to Q.nw
+        line from Q.c+(d/4,0) to Q.e
+    },
+    {
+       line from Q.ne to Q.n to Q.c-(d/4,0) to Q.s to Q.se to Q.e-(d/4,0) to Q.ne 
+       line from Q.c-(d/4,0) to Q.w
+    
+    })
+]')
+
+
+#-----------------------------------------------------------------------
+# register(meno)
+#-----------------------------------------------------------------------
+define(`register',`[
+    d = 0.6
+    boxrad=0.1 
+    setrgb( 0.4, 0.4, 0.4);
+    rgbfill(255/255, 255/255, 224/255, Q: box ht d wid 4*d )  
+    color_black
+    {"\textit{$1}" at Q.c };
+]')
+
+
+#-----------------------------------------------------------------------
+# register_shadow(meno)
+#-----------------------------------------------------------------------
+define(`register_shadow',`[
+    d = 0.6
+    dx = 0.06
+    E: box ht d + dx wid 4*d + dx invis
+    
+    boxrad=0.1 
+    setrgb( 0.8, 0.8, 0.8); 
+    rgbfill(0.8, 0.8, 0.8, box ht d wid 4*d at E.c + (dx/2, -dx/2) )
+    
+    setrgb( 0.4, 0.4, 0.4);
+    rgbfill(255/255, 255/255, 224/255, Q: box ht d wid 4*d at E.c + (-dx/2, dx/2) ) 
+    
+    color_black
+    {"\textit{$1}" at Q.c };
+
+]')
+
+
+#-----------------------------------------------------------------------
+# counter(meno)
+#-----------------------------------------------------------------------
+define(`counter',`[
+    d = 0.6
+    boxrad=0.1 
+    setrgb( 0.4, 0.4, 0.4);
+    rgbfill(175/255, 238/255, 238/255, Q: box ht d wid 4*d )  
+    color_black
+    {"\textit{$1}" at Q.c };
+]')
+
+
+#-----------------------------------------------------------------------
+# prescaler(hodnota)
+#-----------------------------------------------------------------------
+define(`prescaler',`[
+    d = 0.6
+    boxrad=0.1 
+    color_orange
+    rgbfill(255/255, 250/255, 205/255, Q: box ht d wid 2*d )  
+    color_black
+    {"\textit{$1}" at Q.c };
+]')
+
+
+#-----------------------------------------------------------------------
+# controller(meno)
+#-----------------------------------------------------------------------
+define(`controller',`[
+    d = 0.6
+    boxrad=0.0 
+    color_olive
+    rgbfill(240/255, 255/255, 240/255, Q: box ht d wid 2*d )  
+    color_black
+    {"\textit{$1}" at Q.c };
+]')
+
+#-----------------------------------------------------------------------
+# controller_big(meno1, meno2)
+#-----------------------------------------------------------------------
+define(`controller_big',`[
+    d = 0.6
+    boxrad=0.0 
+    color_olive
+    rgbfill(240/255, 255/255, 240/255, Q: box ht d*1.5 wid 3*d )  
+    color_black
+    {"\textit{$1}" at Q.c above};
+    {"\textit{$2}" at Q.c below};
+]')
+
+
+#-----------------------------------------------------------------------
+# blok(w, h, meno1)
+#-----------------------------------------------------------------------
+define(`block',`[
+    d = 0.6
+    boxrad=0.2 
+    color_steelblue;
+    rgbfill( 245/255, 255/255, 250/255, Q: box ht $3 wid $2 )  
+    color_black
+    {"{$1}" at Q.nw +(boxrad/4, boxrad/4) above ljust};
+]')
+
+#.PE
+

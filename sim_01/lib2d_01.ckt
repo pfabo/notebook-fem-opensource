@@ -1,0 +1,140 @@
+
+.PS
+cct_init                # inicializacia lokalnych premennych
+
+pi=3.14159265359
+                        # parametre z PIC (resp. GNU PIC)
+scale = 2.54            # cm - jednotka pre obrazok
+maxpswid = 30           # rozmery obrazku
+maxpsht = 30            # 30 x 30cm, default je 8.5x11 inch
+
+arrowwid  = 0.127       # parametre sipok - sirka
+arrowht = 0.254         # dlzka
+
+include(./lib/user.ckt)
+
+define(`mix', `[
+    mix_diam = 1;
+    C: circle diameter mix_diam at (Here.x, Here.y+mix_diam)
+    line from C-(mix_diam/sqrt(2)/2, mix_diam/sqrt(2)/2) to C+(mix_diam/sqrt(2)/2,  mix_diam/sqrt(2)/2);
+    line from C-(mix_diam/sqrt(2)/2,-mix_diam/sqrt(2)/2) to C+(mix_diam/sqrt(2)/2, -mix_diam/sqrt(2)/2);
+]' )
+
+
+
+#-----------------------------------------------------------------------
+
+Origin: Here 
+
+size_x = 10
+size_y = 10
+
+d = 2;
+boxrad=0.1;
+#-----------------------------------------------------------------------
+# mriezka
+#move to (-0.5, size_y/2); grid(size_x, size_y); move to 0,0;
+#----------------------------------------------------------------------\n\n
+    {" \footnotesize \textit  {} " at (0,0) center }; 
+move to (-5.0,5.0); dot; color_red;
+{" \footnotesize \textit  {1} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {nw} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (5.0,5.0); dot; color_red;
+{" \footnotesize \textit  {2} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {nw} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (5.0,-5.0); dot; color_red;
+{" \footnotesize \textit  {3} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {se} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (-5.0,-5.0); dot; color_red;
+{" \footnotesize \textit  {4} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {sw} " at Here + (0, -0.025) below }; 
+color_black;
+
+line -> from (-5.0,5.0) to (5.0,5.0);color_blue;
+{" \footnotesize \textit  {1} " at last line.c ljust}; 
+{" \footnotesize \textit  {n} " at last line.c rjust } 
+color_black;
+
+line -> from (5.0,5.0) to (5.0,-5.0);color_blue;
+{" \footnotesize \textit  {2} " at last line.c ljust}; 
+{" \footnotesize \textit  {e} " at last line.c rjust } 
+color_black;
+
+line -> from (5.0,-5.0) to (-5.0,-5.0);color_blue;
+{" \footnotesize \textit  {3} " at last line.c ljust}; 
+{" \footnotesize \textit  {s} " at last line.c rjust } 
+color_black;
+
+line -> from (-5.0,-5.0) to (-5.0,5.0);color_blue;
+{" \footnotesize \textit  {4} " at last line.c ljust}; 
+{" \footnotesize \textit  {w} " at last line.c rjust } 
+color_black;
+
+
+move to (-2,0); dot; color_red;
+{" \footnotesize \textit  {5} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {cn} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (-1,0); dot; color_red;
+{" \footnotesize \textit  {6} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {e} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (-2,1); dot; color_red;
+{" \footnotesize \textit  {7} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {n} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (-3,0); dot; color_red;
+{" \footnotesize \textit  {8} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {w} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (-2,-1); dot; color_red;
+{" \footnotesize \textit  {9} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {s} " at Here + (0, -0.025) below }; 
+color_black;
+
+arc <-  cw  rad 1.0 from (-2,1) to (-1,0) ;color_dark_green;{" \footnotesize \textit   ne " at last arc.ne  };color_black;
+arc <-  cw  rad 1.0 from (-3,0) to (-2,1) ;color_dark_green;{" \footnotesize \textit   nw " at last arc.nw  };color_black;
+arc ->      rad 1.0 from (-3,0) to (-2,-1) ;color_dark_green;{" \footnotesize \textit   sw " at last arc.sw  };color_black;
+arc <-  cw  rad 1.0 from (-1,0) to (-2,-1) ;color_dark_green;{" \footnotesize \textit   se " at last arc.se  };color_black;
+
+move to (2,0); dot; color_red;
+{" \footnotesize \textit  {10} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {cn} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (3,0); dot; color_red;
+{" \footnotesize \textit  {11} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {e} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (2,1); dot; color_red;
+{" \footnotesize \textit  {12} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {n} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (1,0); dot; color_red;
+{" \footnotesize \textit  {13} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {w} " at Here + (0, -0.025) below }; 
+color_black;
+
+move to (2,-1); dot; color_red;
+{" \footnotesize \textit  {14} " at Here + (0,  0.025) above }; 
+{" \footnotesize \textit  {s} " at Here + (0, -0.025) below }; 
+color_black;
+
+arc <-  cw  rad 1.0 from (2,1) to (3,0) ;color_dark_green;{" \footnotesize \textit   ne " at last arc.ne  };color_black;
+arc <-  cw  rad 1.0 from (1,0) to (2,1) ;color_dark_green;{" \footnotesize \textit   nw " at last arc.nw  };color_black;
+arc ->      rad 1.0 from (1,0) to (2,-1) ;color_dark_green;{" \footnotesize \textit   sw " at last arc.sw  };color_black;
+arc <-  cw  rad 1.0 from (3,0) to (2,-1) ;color_dark_green;{" \footnotesize \textit   se " at last arc.se  };color_black;
+
+.PE

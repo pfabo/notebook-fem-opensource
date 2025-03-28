@@ -1,0 +1,18 @@
+!------ Skeleton for body section -----
+Body 1
+  Name = Vzduch
+End
+
+!------ Skeleton for boundary section -----
+Boundary Condition 1
+  Name = Okraj
+End
+
+Boundary Condition 2
+  Name = Lava elektroda
+End
+
+Boundary Condition 3
+  Name = Prava elektroda
+End
+
