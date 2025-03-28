@@ -13,6 +13,7 @@ Jupyter Notebook podklady k seminaru Open-Source nastroje pre FEM. Prezentáca p
 * FreeCAD
 * Paraview
 * python
+* PyCirkuit
 
 
 ![priklad](./img/pw_03.png)
