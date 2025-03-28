@@ -1,0 +1,235 @@
+
+.PS
+pi=3.14159265359
+                        # parametre z PIC (resp. GNU PIC)
+scale = 2.54            # cm - jednotka pre obrazok
+maxpswid = 30           # rozmery obrazku
+maxpsht = 30            # 30 x 30cm, default je 8.5x11 inch
+cct_init                # inicializacia lokalnych premennych
+
+arrowwid  = 0.127       # parametre sipok - sirka
+arrowht = 0.254         # dlzka
+
+#-----------------------------------------------------------------------
+# named colors
+#-----------------------------------------------------------------------
+define(`color_reset',              `[ resetrgb;                          ]')
+
+# base colors
+define(`color_black',              `[ setrgb(       0,       0,       0); ]')
+define(`color_white',              `[ setrgb(       1,       1,       1); ]')
+define(`color_grey',               `[ setrgb( 192/255, 192/255, 192/255); ]')
+define(`color_blue',               `[ setrgb(       0,       0,       1); ]')
+define(`color_green',              `[ setrgb(       0,       1,       0); ]')
+define(`color_red',                `[ setrgb(       1,       0,       0); ]')
+define(`color_yellow',             `[ setrgb(       1,       1,       0); ]')
+define(`color_cyan',               `[ setrgb(       0,       1,       1); ]')
+define(`color_brown',              `[ setrgb( 165/255,  42/255,  42/255); ]')
+define(`color_orange',             `[ setrgb( 255/255, 165/255,       0); ]')
+define(`color_violet',             `[ setrgb( 238/255, 130/255, 238/255); ]')
+
+# light base colors
+define(`color_light_grey',         `[ setrgb( 211/255, 211/255, 211/255); ]')
+define(`color_light_yellow',       `[ setrgb( 255/255, 255/255, 224/255); ]')
+define(`color_light_blue',         `[ setrgb( 173/255, 216/255, 230/255); ]')
+
+# dark base colors
+define(`color_dark_grey',          `[ setrgb( 169/255, 169/255, 169/255); ]')
+define(`color_dark_cyan',          `[ setrgb(       0, 139/255, 139/255); ]')
+define(`color_dark_green',         `[ setrgb(  47/255,  79/255,  47/255); ]')
+define(`color_dark_orange',        `[ setrgb( 255/255, 140/255,       0); ]')
+define(`color_dark_red',           `[ setrgb( 139/255,       0,       0); ]')
+define(`color_dark_violet',        `[ setrgb( 148/255,       0, 211/255); ]')
+
+# grey colors
+define(`color_silver'              `[ setrgb( 192/255, 192/255, 192/255); ]')
+
+
+# named colors
+define(`color_aquamarine',         `[ setrgb( 127/255, 255/255, 212/255); ]')
+define(`color_cadetblue',          `[ setrgb(  95/255, 158/255, 160/255); ]')
+define(`color_coral',              `[ setrgb( 255/255, 127/255,       0); ]')
+define(`color_gold',               `[ setrgb( 204/255, 127/255,  50/255); ]')
+define(`color_mediumForestGreen',  `[ setrgb( 107/255, 142/255,  35/255); ]')
+define(`color_slategrey',          `[ setrgb( 112/255, 128/255, 144/255); ]')
+define(`color_firebrick',          `[ setrgb( 178/255,  34/255,  34/255); ]')
+define(`color_olive',              `[ setrgb( 128/255, 128/255,       0); ]')
+define(`color_khaki',              `[ setrgb( 240/255, 230/255, 140/255); ]')
+define(`color_dark_khaki',         `[ setrgb( 189/255, 183/255, 107/255); ]')
+define(`color_lemonchiffon',       `[ setrgb( 255/255, 250/255, 205/255); ]')
+define(`color_steelblue',          `[ setrgb(  70/255, 130/255, 180/255); ]')
+
+# light named colors
+define(`color_snow',               `[ setrgb( 255/255, 250/255, 250/255); ]')
+define(`color_honeydew',           `[ setrgb( 240/255, 255/255, 240/255); ]')
+define(`color_mintcream',          `[ setrgb( 245/255, 255/255, 250/255); ]')
+define(`color_azure',              `[ setrgb( 240/255, 255/255, 255/255); ]')
+define(`color_aliceblue',          `[ setrgb( 240/255, 248/255, 255/255); ]')
+define(`color_ghostwhite',         `[ setrgb( 248/255, 248/255, 255/255); ]')
+define(`color_whitesmoke',         `[ setrgb( 245/255, 245/255, 245/255); ]')
+define(`color_seashell',           `[ setrgb( 255/255, 245/255, 238/255); ]')
+define(`color_beige',              `[ setrgb( 245/255, 245/255, 220/255); ]')
+define(`color_oldlace',            `[ setrgb( 253/255, 248/255, 230/255); ]')
+define(`color_floralwhite',        `[ setrgb( 255/255, 250/255, 240/255); ]')
+define(`color_ivory',              `[ setrgb( 255/255, 255/255, 240/255); ]')
+define(`color_antiquewhite',       `[ setrgb( 255/255, 235/255, 215/255); ]')
+define(`color_linien',             `[ setrgb( 250/255, 240/255, 230/255); ]')
+define(`color_lavenderblush',      `[ setrgb( 255/255, 240/255, 245/255); ]')
+define(`color_mistyrose',          `[ setrgb( 255/255, 228/255, 225/255); ]')
+
+#define(`color_'                `[ setrgb( /255, /255, /255); ]')
+
+#-----------------------------------------------------------------------
+# kody farieb pre farebnu vypln
+# rgbfill( r,g,b, {uzavreta oblast, box, circle ...})
+
+# base colors
+define(`fill_black',              `       0,       0,       0')
+define(`fill_white',              `       1,       1,       1')
+define(`fill_grey',               `192/255, 192/255, 192/255')
+define(`fill_blue',               `       0,       0,       1')
+define(`fill_green',              `       0,       1,       0')
+define(`fill_red',                `       1,       0,       0')
+define(`fill_yellow',             `       1,       1,       0')
+define(`fill_cyan',               `       0,       1,       1')
+define(`fill_brown',              ` 165/255,  42/255,  42/255')
+define(`fill_orange',             ` 255/255, 165/255,       0')
+define(`fill_violet',             ` 238/255, 130/255, 238/255')
+
+# light base colors
+define(`fill_light_grey',         ` 211/255, 211/255, 211/255')
+define(`fill_light_yellow',       ` 255/255, 255/255, 224/255')
+define(`fill_light_blue',         ` 173/255, 216/255, 230/255')
+
+# dark base colors
+define(`fill_dark_grey',          ` 169/255, 169/255, 169/255')
+define(`fill_dark_cyan',          `       0, 139/255, 139/255')
+define(`fill_dark_green',         `  47/255,  79/255,  47/255')
+define(`fill_dark_orange',        ` 255/255, 140/255,       0')
+define(`fill_dark_red',           ` 139/255,       0,       0')
+define(`fill_dark_violet',        ` 148/255,       0, 211/255')
+
+# grey colors
+define(`fill_silver'              ` 192/255, 192/255, 192/255')
+
+define(`gnd',`[
+    d = 1;
+    L: line from Here to Here + (0, -d/4)
+    linethick = 2
+    line from L.end + (-d/4, 0) to L.end + (d/4, 0) 
+]')
+
+define(`power',`[
+    d = 1;
+    up_
+    PWR: tconn(d/2, 0); "\textit{$1}" at PWR.n above; 
+]')
+
+#=======================================================================
+
+Origin: Here 
+d = 2;                  # 1cm zakladna dlzka
+{" \footnotesize \textit  {} " at (0,0) center }; 
+move to (-5.0,5.0); dot; color_red;
+{" \footnotesize \textit  {1} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {nw} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (5.0,5.0); dot; color_red;
+{" \footnotesize \textit  {2} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {nw} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (5.0,-5.0); dot; color_red;
+{" \footnotesize \textit  {3} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {se} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (-5.0,-5.0); dot; color_red;
+{" \footnotesize \textit  {4} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {sw} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+line -> from (-5.0,5.0) to (5.0,5.0);color_dark_green;
+{" \footnotesize \textit  {1} " at last line.c rjust above}; 
+{" \footnotesize \textit  {n} " at last line.c ljust below} 
+color_black;
+
+line -> from (5.0,5.0) to (5.0,-5.0);color_dark_green;
+{" \footnotesize \textit  {2} " at last line.c rjust above}; 
+{" \footnotesize \textit  {e} " at last line.c ljust below} 
+color_black;
+
+line -> from (5.0,-5.0) to (-5.0,-5.0);color_dark_green;
+{" \footnotesize \textit  {3} " at last line.c rjust above}; 
+{" \footnotesize \textit  {s} " at last line.c ljust below} 
+color_black;
+
+line -> from (-5.0,-5.0) to (-5.0,5.0);color_dark_green;
+{" \footnotesize \textit  {4} " at last line.c rjust above}; 
+{" \footnotesize \textit  {w} " at last line.c ljust below} 
+color_black;
+
+
+move to (-2,0); dot; color_red;
+{" \footnotesize \textit  {5} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {cn} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (-1,0); dot; color_red;
+{" \footnotesize \textit  {6} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {e} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (-2,1); dot; color_red;
+{" \footnotesize \textit  {7} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {n} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (-3,0); dot; color_red;
+{" \footnotesize \textit  {8} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {w} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (-2,-1); dot; color_red;
+{" \footnotesize \textit  {9} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {s} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+arc <-  cw  rad 1.0 from (-2,1) to (-1,0) ;color_dark_green;{" \footnotesize \textit   ne " at last arc.ne  };color_black;
+arc <-  cw  rad 1.0 from (-3,0) to (-2,1) ;color_dark_green;{" \footnotesize \textit   nw " at last arc.nw  };color_black;
+arc ->      rad 1.0 from (-3,0) to (-2,-1) ;color_dark_green;{" \footnotesize \textit   sw " at last arc.sw  };color_black;
+arc <-  cw  rad 1.0 from (-1,0) to (-2,-1) ;color_dark_green;{" \footnotesize \textit   se " at last arc.se  };color_black;
+
+move to (2,0); dot; color_red;
+{" \footnotesize \textit  {10} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {cn} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (3,0); dot; color_red;
+{" \footnotesize \textit  {11} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {e} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (2,1); dot; color_red;
+{" \footnotesize \textit  {12} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {n} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (1,0); dot; color_red;
+{" \footnotesize \textit  {13} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {w} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+move to (2,-1); dot; color_red;
+{" \footnotesize \textit  {14} " at Here + (-0.1,  0.1) above }; 
+{" \footnotesize \textit  {s} " at Here + (0.1, -0.1) below }; 
+color_black;
+
+arc <-  cw  rad 1.0 from (2,1) to (3,0) ;color_dark_green;{" \footnotesize \textit   ne " at last arc.ne  };color_black;
+arc <-  cw  rad 1.0 from (1,0) to (2,1) ;color_dark_green;{" \footnotesize \textit   nw " at last arc.nw  };color_black;
+arc ->      rad 1.0 from (1,0) to (2,-1) ;color_dark_green;{" \footnotesize \textit   sw " at last arc.sw  };color_black;
+arc <-  cw  rad 1.0 from (3,0) to (2,-1) ;color_dark_green;{" \footnotesize \textit   se " at last arc.se  };color_black;
+
+
+.PE

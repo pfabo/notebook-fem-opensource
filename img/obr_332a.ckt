@@ -1,0 +1,169 @@
+
+.PS
+pi=3.14159265359
+                        # parametre z PIC (resp. GNU PIC)
+scale = 2.54            # cm - jednotka pre obrazok
+maxpswid = 30           # rozmery obrazku
+maxpsht = 30            # 30 x 30cm, default je 8.5x11 inch
+cct_init                # inicializacia lokalnych premennych
+
+arrowwid  = 0.127       # parametre sipok - sirka
+arrowht = 0.254         # dlzka
+
+#-----------------------------------------------------------------------
+# named colors
+#-----------------------------------------------------------------------
+define(`color_reset',              `[ resetrgb;                          ]')
+
+# base colors
+define(`color_black',              `[ setrgb(       0,       0,       0); ]')
+define(`color_white',              `[ setrgb(       1,       1,       1); ]')
+define(`color_grey',               `[ setrgb( 192/255, 192/255, 192/255); ]')
+define(`color_blue',               `[ setrgb(       0,       0,       1); ]')
+define(`color_green',              `[ setrgb(       0,       1,       0); ]')
+define(`color_red',                `[ setrgb(       1,       0,       0); ]')
+define(`color_yellow',             `[ setrgb(       1,       1,       0); ]')
+define(`color_cyan',               `[ setrgb(       0,       1,       1); ]')
+define(`color_brown',              `[ setrgb( 165/255,  42/255,  42/255); ]')
+define(`color_orange',             `[ setrgb( 255/255, 165/255,       0); ]')
+define(`color_violet',             `[ setrgb( 238/255, 130/255, 238/255); ]')
+
+# light base colors
+define(`color_light_grey',         `[ setrgb( 211/255, 211/255, 211/255); ]')
+define(`color_light_yellow',       `[ setrgb( 255/255, 255/255, 224/255); ]')
+define(`color_light_blue',         `[ setrgb( 173/255, 216/255, 230/255); ]')
+
+# dark base colors
+define(`color_dark_grey',          `[ setrgb( 169/255, 169/255, 169/255); ]')
+define(`color_dark_cyan',          `[ setrgb(       0, 139/255, 139/255); ]')
+define(`color_dark_green',         `[ setrgb(  47/255,  79/255,  47/255); ]')
+define(`color_dark_orange',        `[ setrgb( 255/255, 140/255,       0); ]')
+define(`color_dark_red',           `[ setrgb( 139/255,       0,       0); ]')
+define(`color_dark_violet',        `[ setrgb( 148/255,       0, 211/255); ]')
+
+# grey colors
+define(`color_silver'              `[ setrgb( 192/255, 192/255, 192/255); ]')
+
+
+# named colors
+define(`color_aquamarine',         `[ setrgb( 127/255, 255/255, 212/255); ]')
+define(`color_cadetblue',          `[ setrgb(  95/255, 158/255, 160/255); ]')
+define(`color_coral',              `[ setrgb( 255/255, 127/255,       0); ]')
+define(`color_gold',               `[ setrgb( 204/255, 127/255,  50/255); ]')
+define(`color_mediumForestGreen',  `[ setrgb( 107/255, 142/255,  35/255); ]')
+define(`color_slategrey',          `[ setrgb( 112/255, 128/255, 144/255); ]')
+define(`color_firebrick',          `[ setrgb( 178/255,  34/255,  34/255); ]')
+define(`color_olive',              `[ setrgb( 128/255, 128/255,       0); ]')
+define(`color_khaki',              `[ setrgb( 240/255, 230/255, 140/255); ]')
+define(`color_dark_khaki',         `[ setrgb( 189/255, 183/255, 107/255); ]')
+define(`color_lemonchiffon',       `[ setrgb( 255/255, 250/255, 205/255); ]')
+define(`color_steelblue',          `[ setrgb(  70/255, 130/255, 180/255); ]')
+
+# light named colors
+define(`color_snow',               `[ setrgb( 255/255, 250/255, 250/255); ]')
+define(`color_honeydew',           `[ setrgb( 240/255, 255/255, 240/255); ]')
+define(`color_mintcream',          `[ setrgb( 245/255, 255/255, 250/255); ]')
+define(`color_azure',              `[ setrgb( 240/255, 255/255, 255/255); ]')
+define(`color_aliceblue',          `[ setrgb( 240/255, 248/255, 255/255); ]')
+define(`color_ghostwhite',         `[ setrgb( 248/255, 248/255, 255/255); ]')
+define(`color_whitesmoke',         `[ setrgb( 245/255, 245/255, 245/255); ]')
+define(`color_seashell',           `[ setrgb( 255/255, 245/255, 238/255); ]')
+define(`color_beige',              `[ setrgb( 245/255, 245/255, 220/255); ]')
+define(`color_oldlace',            `[ setrgb( 253/255, 248/255, 230/255); ]')
+define(`color_floralwhite',        `[ setrgb( 255/255, 250/255, 240/255); ]')
+define(`color_ivory',              `[ setrgb( 255/255, 255/255, 240/255); ]')
+define(`color_antiquewhite',       `[ setrgb( 255/255, 235/255, 215/255); ]')
+define(`color_linien',             `[ setrgb( 250/255, 240/255, 230/255); ]')
+define(`color_lavenderblush',      `[ setrgb( 255/255, 240/255, 245/255); ]')
+define(`color_mistyrose',          `[ setrgb( 255/255, 228/255, 225/255); ]')
+
+#define(`color_'                `[ setrgb( /255, /255, /255); ]')
+
+#-----------------------------------------------------------------------
+# kody farieb pre farebnu vypln
+# rgbfill( r,g,b, {uzavreta oblast, box, circle ...})
+
+# base colors
+define(`fill_black',              `       0,       0,       0')
+define(`fill_white',              `       1,       1,       1')
+define(`fill_grey',               `192/255, 192/255, 192/255')
+define(`fill_blue',               `       0,       0,       1')
+define(`fill_green',              `       0,       1,       0')
+define(`fill_red',                `       1,       0,       0')
+define(`fill_yellow',             `       1,       1,       0')
+define(`fill_cyan',               `       0,       1,       1')
+define(`fill_brown',              ` 165/255,  42/255,  42/255')
+define(`fill_orange',             ` 255/255, 165/255,       0')
+define(`fill_violet',             ` 238/255, 130/255, 238/255')
+
+# light base colors
+define(`fill_light_grey',         ` 211/255, 211/255, 211/255')
+define(`fill_light_yellow',       ` 255/255, 255/255, 224/255')
+define(`fill_light_blue',         ` 173/255, 216/255, 230/255')
+
+# dark base colors
+define(`fill_dark_grey',          ` 169/255, 169/255, 169/255')
+define(`fill_dark_cyan',          `       0, 139/255, 139/255')
+define(`fill_dark_green',         `  47/255,  79/255,  47/255')
+define(`fill_dark_orange',        ` 255/255, 140/255,       0')
+define(`fill_dark_red',           ` 139/255,       0,       0')
+define(`fill_dark_violet',        ` 148/255,       0, 211/255')
+
+# grey colors
+define(`fill_silver'              ` 192/255, 192/255, 192/255')
+
+define(`gnd',`[
+    d = 1;
+    L: line from Here to Here + (0, -d/4)
+    linethick = 2
+    line from L.end + (-d/4, 0) to L.end + (d/4, 0) 
+]')
+
+define(`power',`[
+    d = 1;
+    up_
+    PWR: tconn(d/2, 0); "\textit{$1}" at PWR.n above; 
+]')
+
+#=======================================================================
+
+Origin: Here 
+d = 2;                  # 1cm zakladna dlzka
+size_x=3;
+size_y=3;
+
+#=======================================================================
+# grid - vykreslenie mriezky
+# grid(x,y) - velkost x,y - rozmery v default jednotkach
+#-----------------------------------------------------------------------
+define(`grid',`[
+    
+    W: box ht $2+1 wid $1+1 invis
+    move to W.w + (.5,0)
+    Q: box ht $2 wid $1 invis
+
+    setrgb(0.9,0.9,0.9);
+    for i=0 to $2*2 do{
+        line from (Q.w.x, Q.s.y+i*0.5) to (Q.w.x+$1, Q.s.y+i*0.5);
+        { color_blue; sprintf("\scriptsize %g",i/2) at (Q.w.x-0.55, Q.s.y+i*0.5) ljust; setrgb(0.9,0.9,0.9); };
+    }; 
+    for i=0 to $1*2 do{
+        line from (Q.w.x + i*0.5, Q.s.y) to (Q.w.x + i*0.5, Q.s.y+$2);
+        { color_blue; sprintf("\scriptsize %g",i/2) at (Q.w.x + i*0.5, Q.s.y-0.2); setrgb(0.9,0.9,0.9); };
+    }
+    resetrgb;
+]')
+
+# mriezka, size_x a size_y sa substituuju z argumentov funkcie
+move to (-0.5, size_y/2); grid(size_x, size_y); move to 0,0;
+
+right_;
+r = 1.5;
+move to (0,r);
+C1: circle diam 2*r;
+color_red;
+alpha = pi_ / 4;     # uhol v radianoch
+line from C1.c to C1.c + (cos(alpha), sin(alpha))*r;
+dot;
+
+.PE
