@@ -15,6 +15,7 @@ Jupyter Notebook podklady k seminaru Open-Source nastroje pre FEM. Prezentáca p
 * python
 * PyCirkuit
 
+Please post questions, additions and suggestions in the discussion.
 
 ![priklad](./img/pw_03.png)
 
