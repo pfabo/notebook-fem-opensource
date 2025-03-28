@@ -1,0 +1,121 @@
+ELMER SOLVER (v 9.0) STARTED AT: 2025/03/24 09:15:33
+ParCommInit:  Initialize #PEs:            1
+MAIN: OMP_NUM_THREADS not set. Using only 1 thread per task.
+MAIN: 
+MAIN: =============================================================
+MAIN: ElmerSolver finite element software, Welcome!
+MAIN: This program is free software licensed under (L)GPL
+MAIN: Copyright 1st April 1995 - , CSC - IT Center for Science Ltd.
+MAIN: Webpage http://www.csc.fi/elmer, Email elmeradm@csc.fi
+MAIN: Version: 9.0 (Rev: 4f69f075e, Compiled: 2025-03-24)
+MAIN:  Running one task without MPI parallelization.
+MAIN:  Running with just one thread per task.
+MAIN: =============================================================
+MAIN: 
+MAIN: 
+MAIN: -------------------------------------
+MAIN: Reading Model: case.sif
+LoadInputFile: Scanning input file: case.sif
+LoadInputFile: Scanning only size info
+LoadInputFile: First time visiting
+LoadInputFile: Reading base load of sif file
+LoadInputFile: Loading input file: case.sif
+LoadInputFile: Reading base load of sif file
+LoadInputFile: Number of BCs: 3
+LoadInputFile: Number of Body Forces: 0
+LoadInputFile: Number of Initial Conditions: 0
+LoadInputFile: Number of Materials: 3
+LoadInputFile: Number of Equations: 1
+LoadInputFile: Number of Solvers: 1
+LoadInputFile: Number of Bodies: 3
+ListTagKeywords: Setting weight for keywords!
+ListTagKeywords: No parameters width suffix: normalize by area
+ListTagKeywords: Setting weight for keywords!
+ListTagKeywords: No parameters width suffix: normalize by volume
+ElmerAsciiMesh: Base mesh name: ./.
+LoadMesh: Elapsed REAL time:     0.0225 (s)
+MAIN: -------------------------------------
+AddVtuOutputSolverHack: Adding ResultOutputSolver to write VTU output in file: case
+OptimizeBandwidth: Initial bandwidth for electrostatics: 11287
+OptimizeBandwidth: Optimized bandwidth for electrostatics: 154
+MAIN: Number of timesteps to be saved: 10
+MAIN: 
+MAIN: -------------------------------------
+MAIN:  Steady state iteration:            1
+MAIN: -------------------------------------
+MAIN: 
+StatElecSolver: -------------------------------------
+StatElecSolver: Electrostatics solver:
+StatElecSolver: -------------------------------------
+StatElecSolver: Electrostatic iteration: 1
+StatElecSolver:  Assembly (s)          :  0.10495199999999999
+      10 0.2387E-02
+      20 0.7837E-03
+      30 0.2777E-03
+      40 0.1193E-03
+      50 0.8890E-04
+      60 0.4717E-04
+      70 0.5945E-05
+      80 0.5485E-06
+      90 0.8335E-07
+     100 0.8943E-08
+     110 0.2092E-08
+     120 0.5937E-09
+     123 0.1715E-10
+ComputeChange: NS (ITER=1) (NRM,RELC): (  53.898061      2.0000000     ) :: electrostatics
+StatElecSolver:  Solve (s)             :  0.24820699999999998
+StatElecSolver:  Tot. Electric Energy  :   5.8511231244352752E-007
+StatElecSolver:  Capacitance           :   1.1702246248870550E-006
+StatElecSolver:  Result Norm   :    53.898061298328507
+StatElecSolver:  Relative Change :    2.0000000000000000
+StatElecSolver: Electrostatic iteration: 2
+StatElecSolver:  Assembly (s)          :   9.4038000000000066E-002
+       1 0.1519E-10
+ComputeChange: NS (ITER=2) (NRM,RELC): (  53.898061     0.72027236E-10 ) :: electrostatics
+StatElecSolver:  Solve (s)             :   6.5129999999999910E-003
+StatElecSolver:  Tot. Electric Energy  :   5.8511231244072543E-007
+StatElecSolver:  Capacitance           :   1.1702246248814509E-006
+StatElecSolver:  Result Norm   :    53.898061294446379
+StatElecSolver:  Relative Change :    7.2027236289228900E-011
+ComputeChange: SS (ITER=1) (NRM,RELC): (  53.898061      2.0000000     ) :: electrostatics
+SaveResult: -----------------------------------------
+SaveResult: Saving results to file: ./case.result
+SaveResult: Done writing results file
+SaveResult: -----------------------------------------
+ResultOutputSolver: -------------------------------------
+ResultOutputSolver: Saving with prefix: case
+ResultOutputSolver: Creating list for saving - if not present
+CreateListForSaving: Field Variables for Saving
+ResultOutputSolver: Saving in unstructured VTK XML (.vtu) format
+VtuOutputSolver: Saving results in VTK XML format with prefix: case
+VtuOutputSolver: Saving number of partitions: 1
+ResultOutputSolver: -------------------------------------
+MAIN: 
+MAIN: -------------------------------------
+MAIN:  Steady state iteration:            2
+MAIN: -------------------------------------
+MAIN: 
+StatElecSolver: -------------------------------------
+StatElecSolver: Electrostatics solver:
+StatElecSolver: -------------------------------------
+StatElecSolver: Electrostatic iteration: 1
+StatElecSolver:  Assembly (s)          :   9.5215999999999967E-002
+       1 0.1526E-10
+ComputeChange: NS (ITER=1) (NRM,RELC): (  53.898061     0.60542792E-10 ) :: electrostatics
+StatElecSolver:  Solve (s)             :   6.6220000000000168E-003
+StatElecSolver:  Tot. Electric Energy  :   5.8511231243899589E-007
+StatElecSolver:  Capacitance           :   1.1702246248779918E-006
+StatElecSolver:  Result Norm   :    53.898061291183240
+StatElecSolver:  Relative Change :    6.0542791595805342E-011
+ComputeChange: SS (ITER=2) (NRM,RELC): (  53.898061     0.60542792E-10 ) :: electrostatics
+SaveResult: -----------------------------------------
+SaveResult: Saving results to file: ./case.result
+SaveResult: Done writing results file
+SaveResult: -----------------------------------------
+ResultOutputSolver: -------------------------------------
+ResultOutputSolver: Saving in unstructured VTK XML (.vtu) format
+ResultOutputSolver: -------------------------------------
+MAIN: *** Elmer Solver: ALL DONE ***
+MAIN: The end
+SOLVER TOTAL TIME(CPU,REAL):         0.92        1.07
+ELMER SOLVER FINISHED AT: 2025/03/24 09:15:34

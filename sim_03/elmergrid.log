@@ -1,0 +1,79 @@
+
+Starting program Elmergrid, compiled on Mar 24 2025
+Elmergrid reading in-line arguments
+Output will be saved to file lib2d_03.
+
+Elmergrid loading data:
+-----------------------
+Format chosen using the first line: $MeshFormat
+Gmsh input file format is type   4.1 in ASCII.
+Loading mesh in Gmsh format 4.1 from file lib2d_03.msh
+Reading 21 entities in 0D
+Reading 21 entities in 1D
+Reading 3 entities in 2D
+Allocating for 11395 knots and 22792 elements.
+Leading element dimension is 2
+BC name for physical group 4 is: Lava elektroda
+BC name for physical group 5 is: Prava elektroda
+BC name for physical group 6 is: Okraj
+Body name for physical group 1 is: Voda
+Body name for physical group 2 is: Olej
+Body name for physical group 3 is: Vzduch
+Allocating lookup table for tags of size 21
+Defined 21 0DIM entities with geometric tag range [1 21]
+Defined 21 1DIM entities with geometric tag range [1 21]
+   Physical given tag range is [4 6]
+Defined 3 2DIM entities with geometric tag range [1 3]
+   Physical given tag range is [1 3]
+Physical tag offset for 0D is 6
+Geometric tag offset for 0D is 27
+Reading 11395 nodes in 42 blocks.
+Reading 22792 elements in 17 blocks.
+Mapping mesh tag 1 to physical tag 6 in 1DIM
+Mapping mesh tag 2 to physical tag 6 in 1DIM
+Mapping mesh tag 3 to physical tag 6 in 1DIM
+Mapping mesh tag 4 to physical tag 6 in 1DIM
+Mapping mesh tag 5 to physical tag 6 in 1DIM
+Mapping mesh tag 6 to physical tag 6 in 1DIM
+Mapping mesh tag 7 to physical tag 4 in 1DIM
+Mapping mesh tag 8 to physical tag 4 in 1DIM
+Mapping mesh tag 9 to physical tag 4 in 1DIM
+Mapping mesh tag 10 to physical tag 4 in 1DIM
+Mapping mesh tag 11 to physical tag 5 in 1DIM
+Mapping mesh tag 12 to physical tag 5 in 1DIM
+Mapping mesh tag 13 to physical tag 5 in 1DIM
+Mapping mesh tag 14 to physical tag 5 in 1DIM
+Mapping mesh tag 1 to physical tag 1 in 2DIM
+Mapping mesh tag 2 to physical tag 2 in 2DIM
+Mapping mesh tag 3 to physical tag 3 in 2DIM
+Moving bulk elements to boundary elements
+Assuming that boundaries names are already Ok!
+Leading bulk elementtype is 303
+Trailing bulk elementtype is 202
+There are 528 (out of 22792) lower dimensional elements.
+Node 631 belongs to maximum of 8 elements
+Found correctly 528 side elements.
+Parent elements were reordered up to index 22264.
+Moved 22264 elements (out of 22792) to new positions
+Successfully read the mesh from the Gmsh input file lib2d_03.msh
+Using physical numbering of entities
+
+Elmergrid creating and manipulating meshes:
+-------------------------------------------
+Bounding box of all nodes in mesh:
+X:[0,10] Y:[0,10] Z:[0,0]
+Calculate Mesh Pieces in mesh:
+There is a single piece in the mesh, so the mesh is conforming.
+
+Elmergrid saving data with method 2:
+-------------------------------------
+Saving mesh in ElmerSolver format to directory lib2d_03.
+Saving 11395 coordinates to mesh.nodes.
+Saving 22264 element topologies to mesh.elements.
+Saving boundary elements to mesh.boundary.
+Saving header info to mesh.header.
+Saving names info to mesh.names.
+Saving entities info to entities.sif.
+
+Thank you for using Elmergrid!
+Send bug reports and feature wishes to elmeradm@csc.fi
